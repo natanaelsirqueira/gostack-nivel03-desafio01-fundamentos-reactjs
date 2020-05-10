@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import { Container } from './styles';
 
@@ -10,17 +10,36 @@ interface HeaderProps {
   size?: 'small' | 'large';
 }
 
-const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => (
-  <Container size={size}>
-    <header>
-      <img src={Logo} alt="GoFinances" />
-      <nav>
-        {
-          // Todo
-        }
-      </nav>
-    </header>
-  </Container>
-);
+enum Menu {
+  Dashboard,
+  Import,
+}
+
+const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => {
+  const [currentPath, setCurrentPath] = useState('');
+  const { pathname } = useLocation();
+
+  useEffect(() => setCurrentPath(pathname), [pathname]);
+
+  return (
+    <Container size={size}>
+      <header>
+        <img src={Logo} alt="GoFinances" />
+        <nav>
+          <Link to="/" className={currentPath === '/' ? 'selected' : ''}>
+            Listagem
+          </Link>
+
+          <Link
+            to="/import"
+            className={currentPath === '/import' ? 'selected' : ''}
+          >
+            Importar
+          </Link>
+        </nav>
+      </header>
+    </Container>
+  );
+};
 
 export default Header;
